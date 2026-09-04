@@ -1,0 +1,277 @@
+# =====================================================================
+# local-testnet consensus-layer (beacon chain) configuration.
+#
+# SKELETON. Every network-specific value is TBD; the preset, time, validator
+# cycle, fork choice and networking sections below are carried over from
+# sandbox1 so this network behaves like the ones it stands in for. Review each
+# one before a real run and record any deliberate deviation in ../README.md.
+#
+# The execution-layer counterpart lives in ./genesis.json, and the two must
+# agree: each post-merge fork epoch here has a timestamp twin there. Disagree
+# and the two layers fork away from each other.
+# =====================================================================
+
+PRESET_BASE: 'gnosis'
+
+# Free-form short name of the network that this configuration applies to - known
+# canonical network names include:
+# * 'joc' - there can be only one
+# * 'joct' - testnet
+# * 'sandbox1' - development network
+# * 'local-testnet' - this repo; runs on one machine, never peers with the above
+# Must match the regex: [a-z0-9\-]
+CONFIG_NAME: TBD
+
+# Transition
+# ---------------------------------------------------------------
+# TBD. Clique adds 2 difficulty per in-turn block, so at a 5s period total
+# difficulty grows by 2 every 5 seconds and this is a time target in
+# disguise; a value already passed merges the chain instantly. Until it is
+# chosen, use the max-uint64 stub to keep the merge unscheduled.
+# Must equal `terminalTotalDifficulty` in ./genesis.json.
+TERMINAL_TOTAL_DIFFICULTY: TBD
+# By default, don't use these params
+TERMINAL_BLOCK_HASH: 0x0000000000000000000000000000000000000000000000000000000000000000
+TERMINAL_BLOCK_HASH_ACTIVATION_EPOCH: 18446744073709551615
+
+
+# Genesis
+# ---------------------------------------------------------------
+# Recommend 2^x (e.g`2**12` (= 4,096))
+MIN_GENESIS_ACTIVE_VALIDATOR_COUNT: TBD
+# TBD — unix seconds. Beacon genesis is the LATER of this and the timestamp of
+# the eth1 block carrying the MIN_GENESIS_ACTIVE_VALIDATOR_COUNT-th deposit,
+# plus GENESIS_DELAY.
+MIN_GENESIS_TIME: TBD
+# TBD. By convention in this family the low bytes encode the chain id
+# (joc 81 = 0x51, joct 10081 = 0x2761, sandbox1 1337 = 0x539), which is what
+# keeps fork digests from colliding between networks. Pick a chain id that
+# fits in 4 hex digits so the convention still works, and one no other
+# network here uses.
+GENESIS_FORK_VERSION: TBD
+# TBD. GENESIS_DELAY exists to give validators on a public network time to be
+# ready; joc, joct and sandbox1 all use 6000 (~1.7 hours). On one machine
+# there is nobody to wait for, and 1.7 hours per attempt makes the network
+# impractical to iterate on, so a local value belongs in the low hundreds.
+GENESIS_DELAY: TBD
+
+
+# Forking
+# ---------------------------------------------------------------
+# PRESET_BASE gnosis means SLOTS_PER_EPOCH 16, so an epoch is 16 * 5 = 80s,
+# not the mainnet preset's 384s. Low epoch numbers are minutes, not days.
+#
+# Schedule each post-merge fork together with its ./genesis.json timestamp
+# twin, where timestamp = beacon_genesis_time + epoch * 80:
+#   CAPELLA_FORK_EPOCH -> shanghaiTime
+#   DENEB_FORK_EPOCH   -> cancunTime
+#   ELECTRA_FORK_EPOCH -> pragueTime
+#
+# Bellatrix activating does NOT merge the chain on its own — that needs
+# TERMINAL_TOTAL_DIFFICULTY above.
+#
+# Fulu and later are disabled for now:
+#  - These may be re-assigned to another fork-version later
+#  - Temporarily set to max uint64 value: 2**64 - 1
+
+# Altair
+ALTAIR_FORK_VERSION: TBD
+ALTAIR_FORK_EPOCH: TBD
+# Bellatrix
+BELLATRIX_FORK_VERSION: TBD
+BELLATRIX_FORK_EPOCH: TBD
+# Capella — 2026-08-27T16:39:43Z, = shanghaiTime (EL block 31419366)
+CAPELLA_FORK_VERSION: TBD
+CAPELLA_FORK_EPOCH: TBD
+# Deneb — 2026-08-28T02:10:23Z, = cancunTime
+DENEB_FORK_VERSION: TBD
+DENEB_FORK_EPOCH: TBD
+# Electra — 2026-08-28T02:31:43Z, = pragueTime
+ELECTRA_FORK_VERSION: TBD
+ELECTRA_FORK_EPOCH: TBD
+# Fulu
+FULU_FORK_VERSION: TBD
+FULU_FORK_EPOCH: 18446744073709551615
+# Gloas
+GLOAS_FORK_VERSION: TBD
+GLOAS_FORK_EPOCH: 18446744073709551615
+
+# Time parameters
+# ---------------------------------------------------------------
+# 5 seconds
+SECONDS_PER_SLOT: 5
+# 5000 milliseconds
+SLOT_DURATION_MS: 5000
+# 5 (must match the Clique period in ./genesis_details.yaml)
+SECONDS_PER_ETH1_BLOCK: 5
+# 2**8 (= 256) epochs ~5.7 hours
+MIN_VALIDATOR_WITHDRAWABILITY_DELAY: 256
+# 2**8 (= 256) epochs ~5.7 hours
+SHARD_COMMITTEE_PERIOD: 256
+# 2**10 (= 1024) ~1.4 hour
+ETH1_FOLLOW_DISTANCE: 1024
+# 1667 basis points, ~17% of SLOT_DURATION_MS
+PROPOSER_REORG_CUTOFF_BPS: 1667
+# 3333 basis points, ~33% of SLOT_DURATION_MS
+ATTESTATION_DUE_BPS: 3333
+# 6667 basis points, ~67% of SLOT_DURATION_MS
+AGGREGATE_DUE_BPS: 6667
+
+# Altair
+# 3333 basis points, ~33% of SLOT_DURATION_MS
+SYNC_MESSAGE_DUE_BPS: 3333
+# 6667 basis points, ~67% of SLOT_DURATION_MS
+CONTRIBUTION_DUE_BPS: 6667
+
+# Gloas
+# 2500 basis points, 25% of SLOT_DURATION_MS
+ATTESTATION_DUE_BPS_GLOAS: 2500
+# 5000 basis points, 50% of SLOT_DURATION_MS
+AGGREGATE_DUE_BPS_GLOAS: 5000
+# 2500 basis points, 25% of SLOT_DURATION_MS
+SYNC_MESSAGE_DUE_BPS_GLOAS: 2500
+# 5000 basis points, 50% of SLOT_DURATION_MS
+CONTRIBUTION_DUE_BPS_GLOAS: 5000
+# 7500 basis points, 75% of SLOT_DURATION_MS
+PAYLOAD_ATTESTATION_DUE_BPS: 7500
+
+# EIP7805
+# 7500 basis points, 75% of SLOT_DURATION_MS
+VIEW_FREEZE_CUTOFF_BPS: 7500
+# 6667 basis points, ~67% of SLOT_DURATION_MS
+INCLUSION_LIST_SUBMISSION_DUE_BPS: 6667
+# 9167 basis points, ~92% of SLOT_DURATION_MS
+PROPOSER_INCLUSION_LIST_CUTOFF_BPS: 9167
+
+# Validator cycle
+# ---------------------------------------------------------------
+# 2**2 (= 4)
+INACTIVITY_SCORE_BIAS: 4
+# 2**4 (= 16)
+INACTIVITY_SCORE_RECOVERY_RATE: 16
+# 2**4 * 10**9 (= 16,000,000,000) Gwei
+EJECTION_BALANCE: 16000000000
+# 2**2 (= 4)
+MIN_PER_EPOCH_CHURN_LIMIT: 4
+# 2**12 (= 4096)
+CHURN_LIMIT_QUOTIENT: 4096
+
+# Deneb
+# 2**3 (= 8) (*deprecated*)
+MAX_PER_EPOCH_ACTIVATION_CHURN_LIMIT: 2
+
+# Electra
+# 2**7 * 10**9 (= 128,000,000,000) Gwei
+MIN_PER_EPOCH_CHURN_LIMIT_ELECTRA: 128000000000
+# 2**6 * 10**9 (= 64,000,000,000)
+MAX_PER_EPOCH_ACTIVATION_EXIT_CHURN_LIMIT: 64000000000
+
+# Fork choice
+# ---------------------------------------------------------------
+# 40%
+PROPOSER_SCORE_BOOST: 40
+# 20%
+REORG_HEAD_WEIGHT_THRESHOLD: 20
+# 160%
+REORG_PARENT_WEIGHT_THRESHOLD: 160
+# `2` epochs
+REORG_MAX_EPOCHS_SINCE_FINALIZATION: 2
+
+
+# Deposit contract
+# ---------------------------------------------------------------
+# TBD. DEPOSIT_NETWORK_ID is the execution-layer p2p network id — the value
+# geth takes as --networkid — and on joc, joct and sandbox1 it is NOT the
+# chain id. Both must match ./chain.json.
+#
+# DEPOSIT_CONTRACT_ADDRESS must match ./deposit_contract.txt and
+# `depositContractAddress` in ./genesis.json, and the deployment block goes
+# in ./deposit_contract_block.txt so a consensus client knows where to start
+# its eth1 deposit scan.
+DEPOSIT_CHAIN_ID: TBD
+DEPOSIT_NETWORK_ID: TBD
+DEPOSIT_CONTRACT_ADDRESS: TBD
+
+# Networking
+# ---------------------------------------------------------------
+# `10 * 2**20` (= 10485760, 10 MiB)
+MAX_PAYLOAD_SIZE: 10485760
+# `2**10` (= 1024)
+MAX_REQUEST_BLOCKS: 1024
+# `2**8` (= 256)
+EPOCHS_PER_SUBNET_SUBSCRIPTION: 256
+# 33024, ~31 days
+MIN_EPOCHS_FOR_BLOCK_REQUESTS: 33024
+# 2**5 (= 32) slots
+ATTESTATION_PROPAGATION_SLOT_RANGE: 32
+# 500ms
+MAXIMUM_GOSSIP_CLOCK_DISPARITY: 500
+MESSAGE_DOMAIN_INVALID_SNAPPY: 0x00000000
+MESSAGE_DOMAIN_VALID_SNAPPY: 0x01000000
+# 2 subnets per node
+SUBNETS_PER_NODE: 2
+# 2**8 (= 64)
+ATTESTATION_SUBNET_COUNT: 64
+# 0 bits
+ATTESTATION_SUBNET_EXTRA_BITS: 0
+# ceillog2(ATTESTATION_SUBNET_COUNT) + ATTESTATION_SUBNET_EXTRA_BITS
+ATTESTATION_SUBNET_PREFIX_BITS: 6
+
+# Deneb
+# `2**7` (=128)
+MAX_REQUEST_BLOCKS_DENEB: 128
+# `2**14` (= 16384 epochs, ~18 days)
+MIN_EPOCHS_FOR_BLOB_SIDECARS_REQUESTS: 16384
+# `6`
+BLOB_SIDECAR_SUBNET_COUNT: 6
+# `uint64(2)`
+MAX_BLOBS_PER_BLOCK: 2
+# MAX_REQUEST_BLOCKS_DENEB * MAX_BLOBS_PER_BLOCK
+MAX_REQUEST_BLOB_SIDECARS: 768
+
+# Electra
+# `2`
+BLOB_SIDECAR_SUBNET_COUNT_ELECTRA: 2
+# `uint64(2)`
+MAX_BLOBS_PER_BLOCK_ELECTRA: 2
+# MAX_REQUEST_BLOCKS_DENEB * MAX_BLOBS_PER_BLOCK_ELECTRA
+MAX_REQUEST_BLOB_SIDECARS_ELECTRA: 256
+
+# Fulu
+# 2**7 (= 128) groups
+NUMBER_OF_CUSTODY_GROUPS: 128
+# 2**7 (= 128) subnets
+DATA_COLUMN_SIDECAR_SUBNET_COUNT: 128
+# MAX_REQUEST_BLOCKS_DENEB * NUMBER_OF_COLUMNS (= 128 * 128) sidecars
+MAX_REQUEST_DATA_COLUMN_SIDECARS: 16384
+# 2**3 (= 8) samples
+SAMPLES_PER_SLOT: 8
+# 2**2 (= 4) sidecars
+CUSTODY_REQUIREMENT: 4
+# 2**3 (= 8) sidecars
+VALIDATOR_CUSTODY_REQUIREMENT: 8
+# 2**5 * 10**9 (= 32,000,000,000) Gwei
+BALANCE_PER_ADDITIONAL_CUSTODY_GROUP: 32000000000
+# 2**14 (= 16384 epochs, ~18 days)
+MIN_EPOCHS_FOR_DATA_COLUMN_SIDECARS_REQUESTS: 16384
+
+# Gloas
+# 2**7 (= 128) payloads
+MAX_REQUEST_PAYLOADS: 128
+
+# EIP7441
+# 2**8 (= 256) epochs
+EPOCHS_PER_SHUFFLING_PHASE: 256
+# 2**1 (= 2) epochs
+PROPOSER_SELECTION_GAP: 2
+
+# EIP7805
+# 2**4 (= 16) inclusion lists
+MAX_REQUEST_INCLUSION_LIST: 16
+# 2**13 (= 8,192) bytes
+MAX_BYTES_PER_INCLUSION_LIST: 8192
+
+# Blob Scheduling
+# ---------------------------------------------------------------
+
+BLOB_SCHEDULE: []

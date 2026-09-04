@@ -1,0 +1,10 @@
+# Consensus-layer bootstrap nodes (ENRs) for local-testnet. TBD.
+#
+# A single beacon node needs none of these; add one entry per bootnode once
+# there is more than one, or when a second machine has to join.
+#
+# Liveness is proven, not dialled: scripts/discv5_probe.py makes the node reply
+# WHOAREYOU, which only a node whose id is keccak256 of the key in the record
+# can do. Execution-layer counterpart: ./enodes.yaml
+#
+# - enr:TBD

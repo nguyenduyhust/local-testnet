@@ -1,0 +1,87 @@
+# local-testnet — execution-layer genesis, as produced by ./genesis.json
+#
+# SKELETON. Every value below is TBD. Fill them in once the network has been
+# generated, then reproduce with ../scripts/verify_genesis.sh.
+#
+# Unlike joc, joct and sandbox1, this file does not record a network that
+# already runs — it is the source of truth the network is generated FROM, so
+# `geth init` on ./genesis.json defines genesis_hash rather than being checked
+# against it. Record what that command prints; the script holds it there
+# afterwards.
+
+chain_id: TBD
+network_id: TBD   # geth --networkid; state whether it differs from chain_id
+consensus: TBD
+
+genesis_hash: TBD
+genesis_state_root: TBD
+genesis_parent_hash: 0x0000000000000000000000000000000000000000000000000000000000000000
+
+genesis_time: TBD
+gas_limit: TBD
+difficulty: TBD
+nonce: TBD
+mix_hash: TBD
+coinbase: TBD
+
+clique:
+  period: TBD
+  epoch: TBD
+  # The initial signer set is encoded in genesis extraData:
+  #   32 zero bytes || concat(signer addresses) || 65 zero bytes
+  genesis_signers:
+    - TBD
+
+# Fork activation blocks
+forks:
+  homestead: TBD
+  eip150: TBD
+  eip155: TBD
+  eip158: TBD
+  byzantium: TBD
+  constantinople: TBD
+  petersburg: TBD
+  istanbul: TBD
+  muir_glacier: TBD
+  berlin: TBD
+  london: TBD
+
+merge:
+  terminal_total_difficulty: TBD
+  terminal_pow_block: TBD
+  first_pos_block: TBD
+
+# Post-merge forks activate on timestamp. Each is the execution-layer twin of a
+# fork epoch in ./config.yaml and must agree with it, or the layers split.
+timestamp_forks:
+  shanghai: TBD   # = CAPELLA_FORK_EPOCH in ./config.yaml
+  cancun: TBD     # = DENEB_FORK_EPOCH
+  prague: TBD     # = ELECTRA_FORK_EPOCH
+
+blob_schedule:
+  target: TBD
+  max: TBD
+  base_fee_update_fraction: TBD
+
+deposit_contract_address: TBD      # also ./deposit_contract.txt
+deposit_contract_block: TBD        # also ./deposit_contract_block.txt
+deposit_contract_block_hash: TBD   # also ./deposit_contract_block_hash.txt
+
+# Genesis allocation
+alloc_summary:
+  precompile_placeholders: TBD
+  funded: TBD
+
+# Provenance
+# ---------------------------------------------------------------
+# TBD — record, for each value above, whether it was chosen, taken from a
+# source of truth, or measured from the running network, and how it was
+# checked. The header fields and the allocation are provable: `geth init` on
+# ./genesis.json reproduces genesis_hash, and because the state root commits to
+# the whole allocation, that check being green proves both are exactly right.
+#
+# The `config` block does NOT enter the genesis hash, so it can never be proven
+# that way. Anything in it has to come from the source of truth, never from a
+# pattern — on sandbox1, following joc/joct's convention of activating berlin
+# and london at the same block gave a wrong berlinBlock that every check still
+# passed.

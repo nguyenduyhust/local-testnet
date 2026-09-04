@@ -1,0 +1,12 @@
+# Execution-layer bootnodes (enode:// URLs) for local-testnet. TBD.
+#
+# A single-node local network needs none of these; add one entry per bootnode
+# once there is more than one node, or when a second machine has to join.
+#
+# Weaker guarantee than the consensus side: proving a node id belongs to an
+# address needs a full RLPx handshake, so check_bootnodes.sh only checks the
+# URL is well formed and the port accepts TCP.
+#
+# Consensus-layer counterpart: ./bootstrap_nodes.yaml
+#
+# - enode://TBD@TBD:30303
