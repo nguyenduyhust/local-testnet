@@ -1,0 +1,48 @@
+{
+  "config": {
+    "chainId": "TBD",
+    "homesteadBlock": "TBD",
+    "eip150Block": "TBD",
+    "eip155Block": "TBD",
+    "eip158Block": "TBD",
+    "byzantiumBlock": "TBD",
+    "constantinopleBlock": "TBD",
+    "petersburgBlock": "TBD",
+    "istanbulBlock": "TBD",
+    "muirGlacierBlock": "TBD",
+    "berlinBlock": "TBD",
+    "londonBlock": "TBD",
+    "clique": {
+      "period": "TBD",
+      "epoch": "TBD"
+    },
+    "terminalTotalDifficulty": "TBD",
+    "shanghaiTime": "TBD",
+    "cancunTime": "TBD",
+    "pragueTime": "TBD",
+    "depositContractAddress": "TBD",
+    "blobSchedule": {
+      "cancun": {
+        "target": "TBD",
+        "max": "TBD",
+        "baseFeeUpdateFraction": "TBD"
+      },
+      "prague": {
+        "target": "TBD",
+        "max": "TBD",
+        "baseFeeUpdateFraction": "TBD"
+      }
+    }
+  },
+  "nonce": "TBD",
+  "timestamp": "TBD",
+  "extraData": "TBD",
+  "gasLimit": "TBD",
+  "difficulty": "TBD",
+  "mixHash": "TBD",
+  "coinbase": "TBD",
+  "alloc": {},
+  "number": "0x0",
+  "gasUsed": "0x0",
+  "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+}

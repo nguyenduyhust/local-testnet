@@ -1,0 +1,2 @@
+# Genesis state is a binary blob; never try to diff or merge it.
+*.ssz binary

@@ -1,0 +1,75 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly, so config drift surfaces without a PR. Note that a GitHub runner
+    # cannot reach this network: the endpoints are on localhost, so the jobs
+    # below check the files against each other and skip whatever needs a node.
+    # Run the same scripts on the machine hosting the network for the rest.
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  genesis:
+    name: genesis matches the live network
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify genesis
+        run: ./scripts/verify_genesis.sh
+
+  bootnodes:
+    name: bootnodes are well-formed and reachable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check enodes
+        run: ./scripts/check_bootnodes.sh
+
+  deposit-contract:
+    name: deposit contract is deployed and ids match
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check deposit contract
+        run: ./scripts/check_deposit_contract.sh
+
+  genesis-ssz:
+    name: genesis.ssz and config match the beacon node
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PyYAML
+        run: pip install --quiet pyyaml
+      - name: Check genesis.ssz
+        run: ./scripts/check_genesis_ssz.sh
+
+  lint:
+    name: configs parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON
+        run: |
+          set -e
+          for f in $(git ls-files '*.json'); do
+            jq -e . "$f" > /dev/null && echo "ok   $f"
+          done
+      - name: Validate YAML
+        run: |
+          python3 - <<'PY'
+          import subprocess, sys, yaml
+          files = subprocess.check_output(
+              ["git", "ls-files", "*.yaml", "*.yml"], text=True).split()
+          bad = False
+          for f in files:
+              try:
+                  yaml.safe_load(open(f))
+                  print("ok  ", f)
+              except Exception as e:
+                  print("FAIL", f, e); bad = True
+          sys.exit(1 if bad else 0)
+          PY

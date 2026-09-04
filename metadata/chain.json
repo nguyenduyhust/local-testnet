@@ -1,0 +1,25 @@
+{
+  "name": "TBD",
+  "chain": "TBD",
+  "chainId": "TBD",
+  "networkId": "TBD",
+  "shortName": "TBD",
+  "slip44": 1,
+  "nativeCurrency": {
+    "name": "TBD",
+    "symbol": "TBD",
+    "decimals": 18
+  },
+  "rpc": [
+    "TBD"
+  ],
+  "faucets": [],
+  "explorers": [
+    {
+      "name": "TBD",
+      "url": "TBD",
+      "standard": "EIP3091"
+    }
+  ],
+  "infoURL": "TBD"
+}
